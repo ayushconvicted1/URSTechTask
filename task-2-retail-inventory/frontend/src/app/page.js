@@ -21,6 +21,7 @@ export default function RetailInventoryApp() {
   const [productSearch, setProductSearch] = useState("");
   const [productCategory, setProductCategory] = useState("All");
   const [stockStatusFilter, setStockStatusFilter] = useState("all");
+  const [mobilePosView, setMobilePosView] = useState("products"); // "products" | "cart"
   const [availableCategories, setAvailableCategories] = useState([
     "All",
     "Grocery",
@@ -809,8 +810,26 @@ export default function RetailInventoryApp() {
 
       <main className="main-layout no-print" style={{ flex: 1 }}>
         {activeTab === "pos" && (
-          <div className="pos-grid">
-            <div>
+          <div>
+            <div className="pos-mobile-nav">
+              <button
+                type="button"
+                onClick={() => setMobilePosView("products")}
+                className={`pos-mobile-tab ${mobilePosView === "products" ? "active" : ""}`}
+              >
+                📦 Products ({products.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobilePosView("cart")}
+                className={`pos-mobile-tab ${mobilePosView === "cart" ? "active" : ""}`}
+              >
+                🛒 Cart ({cart.reduce((s, i) => s + i.quantity, 0)}) {cart.length > 0 ? `• ₹${cartCalculations.finalTotal.toFixed(2)}` : ""}
+              </button>
+            </div>
+
+            <div className="pos-grid">
+              <div className={`pos-catalog-column ${mobilePosView === "products" ? "mobile-visible" : ""}`}>
               <div className="filter-bar">
                 <div className="search-wrap">
                   <input
@@ -915,11 +934,21 @@ export default function RetailInventoryApp() {
                   })}
                 </div>
               )}
-            </div>
+              </div>
 
-            <div>
-              <div id="cart-drawer" className="cart-panel">
-                <div className="cart-header">
+              <div className={`pos-cart-column ${mobilePosView === "cart" ? "mobile-visible" : ""}`}>
+                <div id="cart-drawer" className="cart-panel">
+                  {mobilePosView === "cart" && (
+                    <button
+                      type="button"
+                      onClick={() => setMobilePosView("products")}
+                      className="btn-secondary"
+                      style={{ width: "100%", padding: "8px 12px", fontSize: "12px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+                    >
+                      ← Back to Products
+                    </button>
+                  )}
+                  <div className="cart-header">
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: "rgba(6, 182, 212, 0.15)", color: "var(--accent-cyan)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1109,9 +1138,10 @@ export default function RetailInventoryApp() {
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {activeTab === "pos" && cart.length > 0 && (
+        {activeTab === "pos" && cart.length > 0 && mobilePosView === "products" && (
           <div className="mobile-cart-bar">
             <div>
               <div style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
@@ -1123,8 +1153,8 @@ export default function RetailInventoryApp() {
             </div>
             <button
               onClick={() => {
-                const el = document.getElementById("cart-drawer");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                setMobilePosView("cart");
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="btn-primary"
               style={{ width: "auto", padding: "10px 18px", fontSize: "12px" }}
@@ -1133,6 +1163,7 @@ export default function RetailInventoryApp() {
             </button>
           </div>
         )}
+
 
         {activeTab === "products" && (
           <div>
@@ -1157,7 +1188,7 @@ export default function RetailInventoryApp() {
               </div>
             </div>
 
-            <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "18px", overflow: "hidden" }}>
+            <div className="table-responsive">
               <table className="table-custom">
                 <thead>
                   <tr>
@@ -1333,7 +1364,7 @@ export default function RetailInventoryApp() {
               </div>
             </div>
 
-            <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "18px", overflow: "hidden" }}>
+            <div className="table-responsive">
               <table className="table-custom">
                 <thead>
                   <tr>
@@ -1690,7 +1721,8 @@ export default function RetailInventoryApp() {
                 {salesReport && salesReport.topSellingProducts && (
                   <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "18px", padding: "18px", marginTop: "16px" }}>
                     <div style={{ fontSize: "14px", fontWeight: 800, color: "#fff", marginBottom: "12px" }}>Top-Selling Products by Volume</div>
-                    <table className="table-custom">
+                    <div className="table-responsive" style={{ border: "none", margin: 0 }}>
+                      <table className="table-custom">
                       <thead>
                         <tr>
                           <th>SKU</th>
@@ -1710,6 +1742,7 @@ export default function RetailInventoryApp() {
                         ))}
                       </tbody>
                     </table>
+                    </div>
                   </div>
                 )}
               </div>

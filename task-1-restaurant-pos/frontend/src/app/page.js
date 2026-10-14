@@ -20,6 +20,7 @@ export default function RestaurantPOSApp() {
   const [menuLoading, setMenuLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [mobilePosView, setMobilePosView] = useState("menu"); // "menu" | "cart"
 
   const [cart, setCart] = useState([]);
   const [orderType, setOrderType] = useState("dine-in");
@@ -674,8 +675,26 @@ export default function RestaurantPOSApp() {
 
       <main className="main-layout no-print" style={{ flex: 1 }}>
         {activeTab === "pos" && (
-          <div className="pos-grid">
-            <div>
+          <div>
+            <div className="pos-mobile-nav">
+              <button
+                type="button"
+                onClick={() => setMobilePosView("menu")}
+                className={`pos-mobile-tab ${mobilePosView === "menu" ? "active" : ""}`}
+              >
+                🍽️ Menu ({filteredMenuItems.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setMobilePosView("cart")}
+                className={`pos-mobile-tab ${mobilePosView === "cart" ? "active" : ""}`}
+              >
+                🛒 Cart ({cart.reduce((s, i) => s + i.quantity, 0)}) {cart.length > 0 ? `• ₹${cartCalculations.finalTotal.toFixed(2)}` : ""}
+              </button>
+            </div>
+
+            <div className="pos-grid">
+              <div className={`pos-catalog-column ${mobilePosView === "menu" ? "mobile-visible" : ""}`}>
               <div className="filter-bar">
                 <div className="search-wrap">
                   <input
@@ -760,11 +779,21 @@ export default function RestaurantPOSApp() {
                   ))}
                 </div>
               )}
-            </div>
+              </div>
 
-            <div>
-              <div id="cart-drawer" className="cart-panel">
-                <div className="cart-header">
+              <div className={`pos-cart-column ${mobilePosView === "cart" ? "mobile-visible" : ""}`}>
+                <div id="cart-drawer" className="cart-panel">
+                  {mobilePosView === "cart" && (
+                    <button
+                      type="button"
+                      onClick={() => setMobilePosView("menu")}
+                      className="btn-secondary"
+                      style={{ width: "100%", padding: "8px 12px", fontSize: "12px", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}
+                    >
+                      ← Back to Menu
+                    </button>
+                  )}
+                  <div className="cart-header">
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <div style={{ width: "28px", height: "28px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.15)", color: "var(--accent-amber)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -988,9 +1017,10 @@ export default function RestaurantPOSApp() {
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {activeTab === "pos" && cart.length > 0 && (
+        {activeTab === "pos" && cart.length > 0 && mobilePosView === "menu" && (
           <div className="mobile-cart-bar">
             <div>
               <div style={{ fontSize: "11px", color: "var(--text-secondary)" }}>
@@ -1002,8 +1032,8 @@ export default function RestaurantPOSApp() {
             </div>
             <button
               onClick={() => {
-                const el = document.getElementById("cart-drawer");
-                if (el) el.scrollIntoView({ behavior: "smooth" });
+                setMobilePosView("cart");
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="btn-primary"
               style={{ width: "auto", padding: "10px 18px", fontSize: "12px" }}
@@ -1185,7 +1215,7 @@ export default function RestaurantPOSApp() {
               </button>
             </div>
 
-            <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "18px", overflow: "hidden" }}>
+            <div className="table-responsive">
               <table className="table-custom">
                 <thead>
                   <tr>
@@ -1363,7 +1393,7 @@ export default function RestaurantPOSApp() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginTop: "16px" }}>
+                <div className="dashboard-two-col">
                   <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-subtle)", borderRadius: "18px", padding: "18px" }}>
                     <div style={{ fontSize: "13px", fontWeight: 800, color: "#fff", marginBottom: "12px" }}>Payment Channels</div>
                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", fontSize: "12px" }}>
