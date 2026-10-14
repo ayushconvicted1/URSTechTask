@@ -308,11 +308,12 @@ select.form-input option {
   max-width: 1360px;
   margin: 0 auto;
   padding: 12px 20px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
-  flex-wrap: nowrap;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .brand-badge {
@@ -320,6 +321,7 @@ select.form-input option {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  justify-self: start;
 }
 
 .nav-user-area {
@@ -327,6 +329,7 @@ select.form-input option {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
+  justify-self: end;
 }
 
 .brand-icon {
@@ -381,26 +384,18 @@ select.form-input option {
 .nav-tabs {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   min-width: 0;
   background: #090d16;
   padding: 4px;
   border-radius: 14px;
   border: 1px solid var(--border-subtle);
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  justify-self: center;
 }
 
-.nav-tabs::-webkit-scrollbar {
+.tab-label-short {
   display: none;
-}
-
-.nav-tabs::after {
-  content: "";
-  display: block;
-  min-width: 6px;
-  flex-shrink: 0;
 }
 
 .tab-btn {
@@ -554,17 +549,23 @@ select.form-input option {
 
 .category-scroll {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
   overflow-x: auto;
-  padding-bottom: 2px;
   scrollbar-width: none;
+  -ms-overflow-style: none;
   min-width: 0;
   max-width: 100%;
+  padding: 2px 0;
+  box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
 }
 
 .category-scroll::-webkit-scrollbar {
-  display: none;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 .category-pill {
@@ -1112,23 +1113,37 @@ select.form-input option {
     min-width: 0;
     margin-top: 2px;
     padding: 4px;
-    display: flex;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    display: grid;
     gap: 5px;
     box-sizing: border-box;
+  }
+
+  .nav-tabs.nav-tabs-staff {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nav-tabs.nav-tabs-admin {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .nav-tabs::-webkit-scrollbar {
     display: none;
   }
 
+  .tab-label-full {
+    display: none;
+  }
+
+  .tab-label-short {
+    display: inline;
+  }
+
   .tab-btn {
-    flex: 0 0 auto;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
     white-space: nowrap;
-    padding: 7px 12px;
+    padding: 7px 6px;
     font-size: 12px;
     font-weight: 700;
   }
@@ -1184,19 +1199,21 @@ select.form-input option {
     max-width: 100%;
     min-width: 0;
     display: flex;
+    align-items: center;
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
+    -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2px;
     box-sizing: border-box;
   }
 
-  .category-scroll::after {
-    content: "";
-    display: block;
-    min-width: 8px;
-    flex-shrink: 0;
+  .category-scroll::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
   }
 
   .category-pill {
@@ -1379,10 +1396,18 @@ select.form-input option {
     box-sizing: border-box;
   }
 
+  .nav-tabs.nav-tabs-staff {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .nav-tabs.nav-tabs-admin {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
   .tab-btn {
-    padding: 6px 10px;
-    font-size: 11.5px;
-    flex-shrink: 0;
+    padding: 6px 3px;
+    font-size: 11px;
+    gap: 3px;
   }
 
   .pos-mobile-tab {

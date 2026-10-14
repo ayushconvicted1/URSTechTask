@@ -129,6 +129,7 @@ const exportSalesCsv = async (req, res) => {
     const headers = [
       'Invoice Number',
       'Date',
+      'Time',
       'Customer/Cashier',
       'Items Count',
       'Subtotal (INR)',
@@ -139,18 +140,24 @@ const exportSalesCsv = async (req, res) => {
       'Status'
     ];
 
-    const rows = sales.map((sale) => [
-      sale.invoiceNumber,
-      new Date(sale.createdAt).toISOString().replace('T', ' ').substring(0, 19),
-      sale.cashier ? `"${sale.cashier.name}"` : 'Staff',
-      sale.items.reduce((s, i) => s + i.quantity, 0),
-      sale.subtotal.toFixed(2),
-      sale.discountAmount.toFixed(2),
-      sale.taxAmount.toFixed(2),
-      sale.totalAmount.toFixed(2),
-      sale.paymentMethod,
-      sale.status
-    ]);
+    const rows = sales.map((sale) => {
+      const d = new Date(sale.createdAt);
+      const datePart = d.toISOString().slice(0, 10);
+      const timePart = d.toISOString().slice(11, 19);
+      return [
+        sale.invoiceNumber,
+        `="${datePart}"`,
+        `="${timePart}"`,
+        sale.cashier ? `"${sale.cashier.name}"` : 'Staff',
+        sale.items.reduce((s, i) => s + i.quantity, 0),
+        sale.subtotal.toFixed(2),
+        sale.discountAmount.toFixed(2),
+        sale.taxAmount.toFixed(2),
+        sale.totalAmount.toFixed(2),
+        sale.paymentMethod,
+        sale.status
+      ];
+    });
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n');
 

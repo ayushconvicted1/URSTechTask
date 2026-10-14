@@ -104,22 +104,28 @@ const exportOrdersCsv = async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
 
-    const headers = ['Order Number', 'Date', 'Type', 'Table', 'Customer', 'Items Count', 'Subtotal (INR)', 'Tax (INR)', 'Discount (INR)', 'Final Total (INR)', 'Payment Status', 'Payment Method', 'Order Status'];
-    const rows = orders.map((o) => [
-      o.orderNumber,
-      new Date(o.createdAt).toISOString(),
-      o.orderType,
-      `"${o.tableNumber || '-'}"`,
-      `"${o.customerName || '-'}"`,
-      o.items.reduce((sum, i) => sum + i.quantity, 0),
-      o.subtotal.toFixed(2),
-      o.taxAmount.toFixed(2),
-      o.discountAmount.toFixed(2),
-      o.finalTotal.toFixed(2),
-      o.paymentStatus,
-      o.paymentMethod,
-      o.status
-    ]);
+    const headers = ['Order Number', 'Date', 'Time', 'Type', 'Table', 'Customer', 'Items Count', 'Subtotal (INR)', 'Tax (INR)', 'Discount (INR)', 'Final Total (INR)', 'Payment Status', 'Payment Method', 'Order Status'];
+    const rows = orders.map((o) => {
+      const d = new Date(o.createdAt);
+      const datePart = d.toISOString().slice(0, 10);
+      const timePart = d.toISOString().slice(11, 19);
+      return [
+        o.orderNumber,
+        `="${datePart}"`,
+        `="${timePart}"`,
+        o.orderType,
+        `"${o.tableNumber || '-'}"`,
+        `"${o.customerName || '-'}"`,
+        o.items.reduce((sum, i) => sum + i.quantity, 0),
+        o.subtotal.toFixed(2),
+        o.taxAmount.toFixed(2),
+        o.discountAmount.toFixed(2),
+        o.finalTotal.toFixed(2),
+        o.paymentStatus,
+        o.paymentMethod,
+        o.status
+      ];
+    });
 
     const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
 

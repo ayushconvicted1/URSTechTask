@@ -620,18 +620,20 @@ export default function RestaurantPOSApp() {
             </div>
           </div>
 
-          <div className="nav-tabs">
+          <div className={`nav-tabs ${user.role === "admin" ? "nav-tabs-admin" : "nav-tabs-staff"}`}>
             <button
               onClick={() => setActiveTab("pos")}
               className={`tab-btn ${activeTab === "pos" ? "active" : ""}`}
             >
-              POS Terminal
+              <span className="tab-label-full">POS Terminal</span>
+              <span className="tab-label-short">Terminal</span>
             </button>
             <button
               onClick={() => setActiveTab("orders")}
               className={`tab-btn ${activeTab === "orders" ? "active" : ""}`}
             >
-              <span>Live Orders</span>
+              <span className="tab-label-full">Live Orders</span>
+              <span className="tab-label-short">Orders</span>
               {orders.filter((o) => ["Pending", "Preparing", "Ready"].includes(o.status)).length > 0 && (
                 <span style={{ padding: "1px 6px", borderRadius: "10px", fontSize: "10px", background: "#f59e0b", color: "#000", fontWeight: 900 }}>
                   {orders.filter((o) => ["Pending", "Preparing", "Ready"].includes(o.status)).length}
@@ -644,14 +646,16 @@ export default function RestaurantPOSApp() {
                 onClick={() => setActiveTab("menu")}
                 className={`tab-btn ${activeTab === "menu" ? "active" : ""}`}
               >
-                Menu Admin
+                <span className="tab-label-full">Menu Admin</span>
+                <span className="tab-label-short">Menu</span>
               </button>
             )}
             <button
               onClick={() => setActiveTab("reports")}
               className={`tab-btn ${activeTab === "reports" ? "active" : ""}`}
             >
-              Daily Sales
+              <span className="tab-label-full">Daily Sales</span>
+              <span className="tab-label-short">Sales</span>
             </button>
           </div>
 
@@ -1046,7 +1050,7 @@ export default function RestaurantPOSApp() {
         {activeTab === "orders" && (
           <div>
             <div className="filter-bar">
-              <div style={{ display: "flex", gap: "6px", overflowX: "auto", flex: 1 }}>
+              <div className="category-scroll" style={{ flex: 1 }}>
                 {["All", "Pending", "Preparing", "Ready", "Completed", "Cancelled"].map((status) => (
                   <button
                     key={status}

@@ -870,41 +870,22 @@ export default function RetailInventoryApp() {
                     return (
                       <div key={prod._id} className={`retail-card ${isOut ? "disabled" : ""}`}>
                         <div>
-                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "8px" }}>
-                            <span style={{
-                              fontFamily: "var(--font-mono)",
-                              fontSize: "11px",
-                              fontWeight: 800,
-                              color: "var(--accent-cyan)",
-                              background: "rgba(6, 182, 212, 0.12)",
-                              padding: "3px 8px",
-                              borderRadius: "6px",
-                              border: "1px solid rgba(6, 182, 212, 0.3)",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: "4px"
-                            }}>
+                          <div className="retail-card-header">
+                            <span className="retail-sku-tag">
                               <span style={{ fontSize: "9px", textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-muted)", fontWeight: 700 }}>SKU</span>
                               <span>{prod.sku}</span>
                             </span>
-                            <span style={{ fontSize: "10px", fontWeight: 700, background: "#162035", padding: "3px 8px", borderRadius: "6px", color: "var(--text-secondary)", border: "1px solid var(--border-subtle)" }}>
+                            <span className="retail-cat-tag">
                               {prod.category}
                             </span>
                           </div>
 
-                          <div style={{ marginTop: "12px" }}>
-                            <div style={{ fontSize: "15px", fontWeight: 700, color: "#fff", lineHeight: 1.35, minHeight: "40px" }}>
+                          <div style={{ marginTop: "10px" }}>
+                            <div className="retail-card-title">
                               {prod.name}
                             </div>
-                            <div style={{ marginTop: "8px" }}>
-                              <span style={{
-                                padding: "3px 10px",
-                                borderRadius: "20px",
-                                fontSize: "11px",
-                                fontWeight: 800,
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "5px",
+                            <div style={{ marginTop: "6px" }}>
+                              <span className="retail-stock-pill" style={{
                                 background: isOut ? "rgba(244, 63, 94, 0.15)" : isLow ? "rgba(245, 158, 11, 0.15)" : "rgba(16, 185, 129, 0.15)",
                                 color: isOut ? "#fb7185" : isLow ? "#fbbf24" : "#34d399",
                                 border: `1px solid ${isOut ? "rgba(244, 63, 94, 0.3)" : isLow ? "rgba(245, 158, 11, 0.3)" : "rgba(16, 185, 129, 0.3)"}`
@@ -915,18 +896,18 @@ export default function RetailInventoryApp() {
                           </div>
                         </div>
 
-                        <div style={{ marginTop: "16px", paddingTop: "12px", borderTop: "1px solid var(--border-subtle)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <div>
-                            <div style={{ fontSize: "10px", color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Price</div>
-                            <span className="price-tag-cyan" style={{ fontSize: "18px" }}>₹{prod.sellingPrice.toFixed(2)}</span>
+                        <div className="retail-card-footer">
+                          <div className="retail-price-wrap">
+                            <span className="retail-price-label">Price</span>
+                            <span className="retail-card-price">₹{prod.sellingPrice.toFixed(2)}</span>
                           </div>
                           <button
                             disabled={isOut}
                             onClick={() => addToCart(prod)}
-                            className="btn-primary"
-                            style={{ width: "auto", padding: "8px 14px", fontSize: "12px", fontWeight: 700 }}
+                            className="btn-add-sale"
                           >
-                            + Add to Sale
+                            <span className="add-btn-full">+ Add to Sale</span>
+                            <span className="add-btn-short">+ Add</span>
                           </button>
                         </div>
                       </div>
