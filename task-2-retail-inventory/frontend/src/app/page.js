@@ -101,9 +101,11 @@ export default function RetailInventoryApp() {
             setStoredUser(res.user);
           }
         })
-        .catch(() => {
-          setUser(null);
-          removeAuthToken();
+        .catch((err) => {
+          if (err?.message?.includes("401") || err?.message?.toLowerCase().includes("unauthorized") || err?.message?.toLowerCase().includes("token")) {
+            setUser(null);
+            removeAuthToken();
+          }
         });
     } else {
       removeAuthToken();
@@ -899,7 +901,7 @@ export default function RetailInventoryApp() {
                         <div className="retail-card-footer">
                           <div className="retail-price-wrap">
                             <span className="retail-price-label">Price</span>
-                            <span className="retail-card-price">₹{prod.sellingPrice.toFixed(2)}</span>
+                            <span className="retail-card-price">₹{prod.sellingPrice % 1 === 0 ? prod.sellingPrice.toLocaleString("en-IN") : prod.sellingPrice.toFixed(2)}</span>
                           </div>
                           <button
                             disabled={isOut}

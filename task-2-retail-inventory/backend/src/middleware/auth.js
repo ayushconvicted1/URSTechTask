@@ -12,7 +12,10 @@ const authenticate = async (req, res, next) => {
     const secret = process.env.JWT_SECRET || 'super_secret_jwt_key_retail_inventory_2026';
     const decoded = jwt.verify(token, secret);
 
-    const user = await User.findById(decoded.id).select('-password');
+    let user = await User.findById(decoded.id).select('-password');
+    if (!user && decoded.email) {
+      user = await User.findOne({ email: decoded.email.toLowerCase().trim() }).select('-password');
+    }
     if (!user) {
       return res.status(401).json({ message: 'User not found or token invalid' });
     }

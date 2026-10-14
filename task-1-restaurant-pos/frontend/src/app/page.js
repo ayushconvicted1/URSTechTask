@@ -78,9 +78,11 @@ export default function RestaurantPOSApp() {
             setStoredUser(res.user);
           }
         })
-        .catch(() => {
-          setUser(null);
-          removeAuthToken();
+        .catch((err) => {
+          if (err?.message?.includes("401") || err?.message?.toLowerCase().includes("unauthorized") || err?.message?.toLowerCase().includes("token")) {
+            setUser(null);
+            removeAuthToken();
+          }
         });
     } else {
       removeAuthToken();
