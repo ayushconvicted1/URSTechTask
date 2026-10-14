@@ -6,7 +6,7 @@ import { api, getStoredUser, setStoredUser, getAuthToken, removeAuthToken } from
 export default function RetailInventoryApp() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("pos");
-  const [authMode, setAuthMode] = useState("login"); // "login" | "register"
+  const [authMode, setAuthMode] = useState("login");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [regName, setRegName] = useState("");
@@ -21,7 +21,7 @@ export default function RetailInventoryApp() {
   const [productSearch, setProductSearch] = useState("");
   const [productCategory, setProductCategory] = useState("All");
   const [stockStatusFilter, setStockStatusFilter] = useState("all");
-  const [mobilePosView, setMobilePosView] = useState("products"); // "products" | "cart"
+  const [mobilePosView, setMobilePosView] = useState("products");
   const [availableCategories, setAvailableCategories] = useState([
     "All",
     "Grocery",

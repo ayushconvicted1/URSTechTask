@@ -6,7 +6,7 @@ import { api, getStoredUser, setStoredUser, getAuthToken, removeAuthToken } from
 export default function RestaurantPOSApp() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("pos");
-  const [authMode, setAuthMode] = useState("login"); // "login" | "register"
+  const [authMode, setAuthMode] = useState("login");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [regName, setRegName] = useState("");
@@ -20,7 +20,7 @@ export default function RestaurantPOSApp() {
   const [menuLoading, setMenuLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [mobilePosView, setMobilePosView] = useState("menu"); // "menu" | "cart"
+  const [mobilePosView, setMobilePosView] = useState("menu");
 
   const [cart, setCart] = useState([]);
   const [orderType, setOrderType] = useState("dine-in");
@@ -1127,7 +1127,7 @@ export default function RestaurantPOSApp() {
                       </div>
                     </div>
 
-                    <div style={{ display: "flex", gap: "6px", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid var(--border-subtle)" }}>
+                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid var(--border-subtle)" }}>
                       {order.status === "Pending" && (
                         <button
                           disabled={activeOrderActionId === order._id}
