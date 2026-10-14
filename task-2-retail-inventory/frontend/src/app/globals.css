@@ -28,6 +28,9 @@
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -35,10 +38,14 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 input, button, select, textarea {
@@ -784,8 +791,11 @@ select.form-input option {
 
 @media (max-width: 1024px) {
   .pos-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .pos-catalog-column {
@@ -794,6 +804,10 @@ select.form-input option {
 
   .pos-catalog-column.mobile-visible {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .pos-cart-column {
@@ -802,10 +816,14 @@ select.form-input option {
 
   .pos-cart-column.mobile-visible {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .dashboard-two-col {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
@@ -817,10 +835,15 @@ select.form-input option {
     border-radius: 14px;
     border: 1px solid var(--border-subtle);
     margin-bottom: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .pos-mobile-tab {
     flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -834,6 +857,9 @@ select.form-input option {
     color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .pos-mobile-tab.active {
@@ -855,6 +881,10 @@ select.form-input option {
     align-items: center;
     justify-content: space-between;
     gap: 8px 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .brand-badge {
@@ -877,6 +907,8 @@ select.form-input option {
   .nav-tabs {
     order: 3;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     margin-top: 2px;
     padding: 4px;
     display: flex;
@@ -885,6 +917,7 @@ select.form-input option {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 5px;
+    box-sizing: border-box;
   }
 
   .nav-tabs::-webkit-scrollbar {
@@ -915,6 +948,9 @@ select.form-input option {
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 }
 
@@ -924,24 +960,35 @@ select.form-input option {
     align-items: stretch;
     gap: 10px;
     padding: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .search-wrap {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .search-wrap input {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .category-scroll {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2px;
+    box-sizing: border-box;
   }
 
   .category-scroll::after {
@@ -959,10 +1006,17 @@ select.form-input option {
   .retail-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .retail-card {
     padding: 10px;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .retail-card-title {
@@ -971,6 +1025,10 @@ select.form-input option {
 
   .main-layout {
     padding: 14px 12px 84px 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .table-custom {
@@ -996,8 +1054,12 @@ select.form-input option {
 
 @media (max-width: 480px) {
   .nav-container {
-    padding: 8px 12px;
+    padding: 8px 10px;
     gap: 6px 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .brand-badge {
@@ -1055,9 +1117,21 @@ select.form-input option {
     border-radius: 9px;
   }
 
+  .nav-tabs {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 2px;
+    padding: 3px;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+
   .tab-btn {
     padding: 6px 10px;
     font-size: 11.5px;
+    flex-shrink: 0;
   }
 
   .pos-mobile-tab {
@@ -1096,25 +1170,27 @@ select.form-input option {
   }
 
   .modal-window {
-    padding: 20px 14px;
-    max-width: calc(100vw - 24px);
+    padding: 18px 14px;
+    max-width: calc(100vw - 20px);
     border-radius: 18px;
+    box-sizing: border-box;
   }
 
   .receipt-modal {
-    padding: 18px 14px;
-    max-width: calc(100vw - 24px);
+    padding: 16px 14px;
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 360px) {
   .product-card-grid,
   .retail-card-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

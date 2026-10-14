@@ -30,6 +30,9 @@
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -37,10 +40,14 @@ body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
+  position: relative;
 }
 
 input,
@@ -502,13 +509,25 @@ select.form-input option {
   margin: 0 auto;
   padding: 24px 20px;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .pos-grid {
   display: grid;
-  grid-template-columns: 1fr 390px;
+  grid-template-columns: minmax(0, 1fr) 390px;
   gap: 24px;
   align-items: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.pos-catalog-column {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .filter-bar {
@@ -521,11 +540,16 @@ select.form-input option {
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .search-wrap {
   position: relative;
   width: 280px;
+  min-width: 0;
 }
 
 .category-scroll {
@@ -534,6 +558,9 @@ select.form-input option {
   overflow-x: auto;
   padding-bottom: 2px;
   scrollbar-width: none;
+  min-width: 0;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .category-scroll::-webkit-scrollbar {
@@ -550,6 +577,7 @@ select.form-input option {
   color: var(--text-secondary);
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
@@ -569,17 +597,24 @@ select.form-input option {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .menu-card {
   background: var(--bg-card);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border-subtle);
   border-radius: 18px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: all 0.2s ease;
+  height: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .menu-card:hover {
@@ -599,6 +634,7 @@ select.form-input option {
   height: 140px;
   background: #121826;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .menu-card-img {
@@ -646,12 +682,20 @@ select.form-input option {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .menu-item-title {
   font-size: 14px;
   font-weight: 700;
   color: #fff;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 38px;
   margin-bottom: 4px;
 }
 
@@ -667,12 +711,14 @@ select.form-input option {
 }
 
 .menu-card-footer {
-  margin-top: 14px;
+  margin-top: auto;
   padding-top: 10px;
   border-top: 1px solid var(--border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
 }
 
 .price-tag {
@@ -680,6 +726,7 @@ select.form-input option {
   font-size: 15px;
   font-weight: 800;
   color: var(--accent-amber);
+  white-space: nowrap;
 }
 
 .btn-add {
@@ -691,6 +738,8 @@ select.form-input option {
   color: #07090e;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
@@ -943,8 +992,11 @@ select.form-input option {
 
 @media (max-width: 1024px) {
   .pos-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .pos-catalog-column {
@@ -953,6 +1005,10 @@ select.form-input option {
 
   .pos-catalog-column.mobile-visible {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .pos-cart-column {
@@ -961,10 +1017,14 @@ select.form-input option {
 
   .pos-cart-column.mobile-visible {
     display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .dashboard-two-col {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
@@ -976,10 +1036,15 @@ select.form-input option {
     border-radius: 14px;
     border: 1px solid var(--border-subtle);
     margin-bottom: 16px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .pos-mobile-tab {
     flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -993,6 +1058,9 @@ select.form-input option {
     color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .pos-mobile-tab.active {
@@ -1014,6 +1082,10 @@ select.form-input option {
     align-items: center;
     justify-content: space-between;
     gap: 8px 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .brand-badge {
@@ -1036,6 +1108,8 @@ select.form-input option {
   .nav-tabs {
     order: 3;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     margin-top: 2px;
     padding: 4px;
     display: flex;
@@ -1044,6 +1118,7 @@ select.form-input option {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     gap: 5px;
+    box-sizing: border-box;
   }
 
   .nav-tabs::-webkit-scrollbar {
@@ -1074,6 +1149,9 @@ select.form-input option {
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 }
 
@@ -1083,24 +1161,35 @@ select.form-input option {
     align-items: stretch;
     gap: 10px;
     padding: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .search-wrap {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .search-wrap input {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .category-scroll {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     display: flex;
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 2px;
+    box-sizing: border-box;
   }
 
   .category-scroll::after {
@@ -1117,49 +1206,80 @@ select.form-input option {
   .menu-card-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .menu-card {
+    border-radius: 14px;
+    height: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .menu-card-img-wrap {
     height: 110px;
   }
 
-  .menu-card-body {
+  .menu-card-content {
     padding: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
-  .menu-card-title {
+  .menu-item-title {
     font-size: 13px;
+    min-height: 34px;
+    line-height: 1.3;
+    margin-bottom: 2px;
   }
 
   .menu-item-desc {
-    font-size: 11px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    line-height: 1.35;
+    display: none;
   }
 
   .menu-card-footer {
-    padding: 0 10px 10px 10px;
+    margin-top: auto;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .price-tag {
-    font-size: 14px;
+    font-size: 13.5px;
   }
 
   .btn-add {
-    padding: 6px 12px;
+    padding: 6px 11px;
     font-size: 11px;
   }
 
   .main-layout {
     padding: 14px 12px 84px 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .orders-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .table-custom {
@@ -1185,8 +1305,12 @@ select.form-input option {
 
 @media (max-width: 480px) {
   .nav-container {
-    padding: 8px 12px;
+    padding: 8px 10px;
     gap: 6px 8px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .brand-badge {
@@ -1244,9 +1368,21 @@ select.form-input option {
     border-radius: 9px;
   }
 
+  .nav-tabs {
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin-top: 2px;
+    padding: 3px;
+    gap: 4px;
+    box-sizing: border-box;
+  }
+
   .tab-btn {
     padding: 6px 10px;
     font-size: 11.5px;
+    flex-shrink: 0;
   }
 
   .pos-mobile-tab {
@@ -1263,12 +1399,15 @@ select.form-input option {
     height: 100px;
   }
 
-  .menu-card-body {
+  .menu-card-content {
     padding: 8px;
   }
 
-  .menu-card-title {
+  .menu-item-title {
     font-size: 12px;
+    min-height: 32px;
+    line-height: 1.3;
+    margin-bottom: 2px;
   }
 
   .menu-item-desc {
@@ -1276,11 +1415,12 @@ select.form-input option {
   }
 
   .menu-card-footer {
-    padding: 0 8px 8px 8px;
+    padding-top: 6px;
+    gap: 4px;
   }
 
   .price-tag {
-    font-size: 13px;
+    font-size: 12.5px;
   }
 
   .btn-add {
@@ -1306,24 +1446,26 @@ select.form-input option {
   }
 
   .modal-window {
-    padding: 20px 14px;
-    max-width: calc(100vw - 24px);
+    padding: 18px 14px;
+    max-width: calc(100vw - 20px);
     border-radius: 18px;
+    box-sizing: border-box;
   }
 
   .receipt-modal {
-    padding: 18px 14px;
-    max-width: calc(100vw - 24px);
+    padding: 16px 14px;
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
   }
 }
 
-@media (max-width: 340px) {
+@media (max-width: 360px) {
   .menu-card-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

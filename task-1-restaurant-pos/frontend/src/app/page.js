@@ -606,7 +606,7 @@ export default function RestaurantPOSApp() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
       <header className="navbar no-print">
         <div className="nav-container">
           <div className="brand-badge">
