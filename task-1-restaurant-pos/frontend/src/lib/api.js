@@ -47,6 +47,10 @@ const request = async (endpoint, options = {}) => {
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    if (response.status === 401 && typeof window !== 'undefined') {
+      removeAuthToken();
+      window.dispatchEvent(new Event('auth:unauthorized'));
+    }
     throw new Error(data.message || `Request failed with status ${response.status}`);
   }
 
@@ -58,6 +62,16 @@ export const api = {
     const data = await request('/auth/login', {
       method: 'POST',
       body: { email, password }
+    });
+    setAuthToken(data.token);
+    setStoredUser(data.user);
+    return data;
+  },
+
+  register: async (name, email, password, role = 'staff') => {
+    const data = await request('/auth/register', {
+      method: 'POST',
+      body: { name, email, password, role }
     });
     setAuthToken(data.token);
     setStoredUser(data.user);

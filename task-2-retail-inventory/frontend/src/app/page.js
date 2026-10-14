@@ -1,13 +1,18 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { api, getStoredUser, setStoredUser, removeAuthToken } from "../lib/api";
+import { api, getStoredUser, setStoredUser, getAuthToken, removeAuthToken } from "../lib/api";
 
 export default function RetailInventoryApp() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("pos");
+  const [authMode, setAuthMode] = useState("login"); // "login" | "register"
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [regName, setRegName] = useState("");
+  const [regEmail, setRegEmail] = useState("");
+  const [regPassword, setRegPassword] = useState("");
+  const [regRole, setRegRole] = useState("staff");
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
 
@@ -78,10 +83,33 @@ export default function RetailInventoryApp() {
   const [printableSale, setPrintableSale] = useState(null);
 
   useEffect(() => {
+    const handleUnauthorized = () => {
+      setUser(null);
+      removeAuthToken();
+    };
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
+
     const stored = getStoredUser();
-    if (stored) {
+    const token = getAuthToken();
+    if (stored && token) {
       setUser(stored);
+      api.getMe()
+        .then((res) => {
+          if (res && res.user) {
+            setUser(res.user);
+            setStoredUser(res.user);
+          }
+        })
+        .catch(() => {
+          setUser(null);
+          removeAuthToken();
+        });
+    } else {
+      removeAuthToken();
+      setUser(null);
     }
+
+    return () => window.removeEventListener("auth:unauthorized", handleUnauthorized);
   }, []);
 
   const loadProducts = async () => {
@@ -232,6 +260,28 @@ export default function RetailInventoryApp() {
       setActiveTab("pos");
     } catch (err) {
       setLoginError(err.message || "Failed to log in");
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+    setLoginLoading(true);
+
+    if (!regName.trim() || !regEmail.trim() || !regPassword.trim()) {
+      setLoginError("All fields are required");
+      setLoginLoading(false);
+      return;
+    }
+
+    try {
+      const data = await api.register(regName, regEmail, regPassword, regRole);
+      setUser(data.user);
+      setActiveTab("pos");
+    } catch (err) {
+      setLoginError(err.message || "Failed to register");
     } finally {
       setLoginLoading(false);
     }
@@ -519,35 +569,132 @@ export default function RetailInventoryApp() {
             </div>
           )}
 
-          <form onSubmit={handleLogin}>
-            <div className="form-group">
-              <label className="form-label">Email Address</label>
-              <input
-                type="email"
-                required
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-                placeholder="name@urstechsolution.com"
-                className="form-input"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Password</label>
-              <input
-                type="password"
-                required
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="••••••••"
-                className="form-input"
-              />
-            </div>
-
-            <button type="submit" disabled={loginLoading} className="btn-primary" style={{ marginTop: "8px" }}>
-              {loginLoading ? "Authenticating..." : "Sign In to Inventory"}
+          <div style={{ display: "flex", background: "rgba(255, 255, 255, 0.05)", padding: "4px", borderRadius: "10px", marginBottom: "22px", border: "1px solid var(--border-subtle)" }}>
+            <button
+              type="button"
+              onClick={() => { setAuthMode("login"); setLoginError(""); }}
+              style={{
+                flex: 1,
+                padding: "8px",
+                fontSize: "12px",
+                fontWeight: 800,
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: authMode === "login" ? "var(--accent-cyan)" : "transparent",
+                color: authMode === "login" ? "#060911" : "var(--text-secondary)",
+                transition: "all 0.2s"
+              }}
+            >
+              Sign In
             </button>
-          </form>
+            <button
+              type="button"
+              onClick={() => { setAuthMode("register"); setLoginError(""); }}
+              style={{
+                flex: 1,
+                padding: "8px",
+                fontSize: "12px",
+                fontWeight: 800,
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                background: authMode === "register" ? "var(--accent-cyan)" : "transparent",
+                color: authMode === "register" ? "#060911" : "var(--text-secondary)",
+                transition: "all 0.2s"
+              }}
+            >
+              Create Account
+            </button>
+          </div>
+
+          {authMode === "login" ? (
+            <form onSubmit={handleLogin}>
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  placeholder="name@urstechsolution.com"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="form-input"
+                />
+              </div>
+
+              <button type="submit" disabled={loginLoading} className="btn-primary" style={{ marginTop: "8px" }}>
+                {loginLoading ? "Authenticating..." : "Sign In to Inventory"}
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleRegister}>
+              <div className="form-group">
+                <label className="form-label">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  placeholder="Jane Smith"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  placeholder="jane@example.com"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Password (min. 6 characters)</label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  value={regPassword}
+                  onChange={(e) => setRegPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Account Role</label>
+                <select
+                  value={regRole}
+                  onChange={(e) => setRegRole(e.target.value)}
+                  className="form-input"
+                  style={{ background: "#162035" }}
+                >
+                  <option value="staff">Retail Cashier (POS & Sales)</option>
+                  <option value="admin">Inventory Admin (Full Access & Stock)</option>
+                </select>
+              </div>
+
+              <button type="submit" disabled={loginLoading} className="btn-primary" style={{ marginTop: "8px" }}>
+                {loginLoading ? "Creating Account..." : "Create Account & Sign In"}
+              </button>
+            </form>
+          )}
 
           <div style={{ marginTop: "28px", paddingTop: "20px", borderTop: "1px solid var(--border-subtle)" }}>
             <div style={{ fontSize: "11px", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", textAlign: "center", marginBottom: "12px" }}>
