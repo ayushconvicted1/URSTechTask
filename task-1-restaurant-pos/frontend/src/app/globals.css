@@ -500,13 +500,12 @@ select.form-input option {
 }
 
 .main-layout {
+  width: 100%;
   max-width: 1360px;
   margin: 0 auto;
   padding: 24px 20px;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .pos-grid {
