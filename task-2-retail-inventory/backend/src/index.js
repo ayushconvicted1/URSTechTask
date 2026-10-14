@@ -4,7 +4,8 @@ const connectDB = require('./db');
 
 const PORT = process.env.PORT || 5001;
 
-if (process.env.NODE_ENV !== 'test') {
+// Only spin up the local server listener when running outside Vercel serverless environment
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
   connectDB()
     .then(() => {
       console.log('MongoDB connected successfully');
@@ -19,3 +20,4 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = app;
+

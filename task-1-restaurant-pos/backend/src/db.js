@@ -1,15 +1,27 @@
 const mongoose = require('mongoose');
 
-let isConnected = false;
+let cachedPromise = null;
 
 const connectDB = async () => {
-  if (mongoose.connection.readyState >= 1) {
+  if (mongoose.connection.readyState === 1) {
     return mongoose.connection;
   }
-  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/restaurant_pos';
-  const conn = await mongoose.connect(uri);
-  isConnected = true;
-  return conn;
+
+  if (!cachedPromise) {
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/restaurant_pos';
+    cachedPromise = mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 8000,
+      connectTimeoutMS: 10000,
+    }).then((m) => m.connection);
+  }
+
+  try {
+    return await cachedPromise;
+  } catch (err) {
+    cachedPromise = null;
+    throw err;
+  }
 };
 
 module.exports = connectDB;
+
