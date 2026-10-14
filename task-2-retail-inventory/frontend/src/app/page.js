@@ -737,12 +737,12 @@ export default function RetailInventoryApp() {
         <div className="nav-container">
           <div className="brand-badge">
             <div className="brand-icon">R</div>
-            <div>
+            <div className="brand-text">
               <div className="brand-title">
                 <span>RetailCore</span>
                 <span className="version-pill">v2.0</span>
               </div>
-              <div style={{ fontSize: "11px", color: "var(--text-muted)" }}>Inventory & Sales POS</div>
+              <div className="brand-subtitle">Inventory & Sales POS</div>
             </div>
           </div>
 
@@ -790,12 +790,12 @@ export default function RetailInventoryApp() {
             </button>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div className="nav-user-area">
             <div className="user-pill">
               <div className="user-avatar">{user.name.charAt(0)}</div>
-              <div>
-                <div style={{ fontSize: "12px", fontWeight: 800, color: "#fff", lineHeight: 1.1 }}>{user.name}</div>
-                <div style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: "var(--accent-cyan)" }}>{user.role}</div>
+              <div className="user-info">
+                <div className="user-name">{user.name}</div>
+                <div className="user-role">{user.role}</div>
               </div>
             </div>
 
