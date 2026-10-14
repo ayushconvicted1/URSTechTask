@@ -85,10 +85,3 @@ npm run dev       # Starts frontend on http://localhost:3001
 ```
 
 ---
-
-## Submission Details
-
-- **Email Destination:** `task.hr@urstechsolution.in`
-- **Deadline:** 17 October 2026, Evening
-- **Vercel Deployment:** Both Express backends contain `vercel.json` and both frontends are Next.js production-ready applications.
-- **API Documentation:** Postman collection files included in `task-1-restaurant-pos/docs/` and `task-2-retail-inventory/docs/`.
